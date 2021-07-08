@@ -14,7 +14,7 @@ import * as wss from "../wssConnection";
 
 const defaultConstraints = {
   video: true,
-  audio: false,
+  audio: true,
 };
 const config = {
   iceServers: [

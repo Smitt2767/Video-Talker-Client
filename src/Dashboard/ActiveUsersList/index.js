@@ -3,11 +3,14 @@ import { useSelector } from "react-redux";
 import userAvatar from "../../resources/userAvatar.png";
 import { callToOtherUser } from "../../utils/webRTC";
 import * as constants from "../../constants/index";
-const ActiveUsersList = () => {
+
+const ActiveUsersList = ({ setShowDrawer = null }) => {
   const { activeUsers, socketId } = useSelector((state) => state.dashboard);
   const { callState } = useSelector((state) => state.call);
+
   const handleUserListClick = (user) => {
     callToOtherUser(user);
+    setShowDrawer && setShowDrawer();
   };
 
   return (
@@ -18,7 +21,9 @@ const ActiveUsersList = () => {
             {user.socketId !== socketId ? (
               <button
                 className="flex justify-start items-center px-4 md:px-8 py-3 w-full hover:bg-customBlue hover:bg-opacity-40"
-                onClick={() => handleUserListClick(user)}
+                onClick={() => {
+                  handleUserListClick(user);
+                }}
                 disabled={callState === constants.callState.CALL_IN_PROGRESS}
               >
                 <img

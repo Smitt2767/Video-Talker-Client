@@ -81,7 +81,7 @@ const Dashboard = (props) => {
                 </button>
               </div>
               <div className="overflow-y-auto h-full">
-                <ActiveUsersList />
+                <ActiveUsersList setShowDrawer={setShowDrawer} />
               </div>
             </div>
           </div>
