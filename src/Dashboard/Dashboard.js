@@ -13,7 +13,7 @@ import ActiveUsersList from "./ActiveUsersList";
 import ConversationButtons from "./CoversationButtons";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const {
     callerUsername,
     calleeUsername,
@@ -29,7 +29,9 @@ const Dashboard = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    getLocalStream();
+    if (username) {
+      getLocalStream();
+    }
   }, []);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const Dashboard = () => {
 
   return (
     <>
+      {!username && props.history.push("/")}
       {callingDialogVisible && (
         <CallingDialog calleeUsername={calleeUsername} />
       )}
