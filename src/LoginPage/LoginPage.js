@@ -25,21 +25,21 @@ const LoginPage = (props) => {
   };
 
   return (
-    <div className="h-full flex justify-center items-center bg-customBlue">
-      <div className="border-2 border-customBlack rounded-xl bg-customBlack py-16 px-12 flex flex-col items-center">
+    <div className="h-full flex justify-center items-center bg-customBlue px-5">
+      <div className="border-2 border-customBlack rounded-xl bg-customBlack py-12 px-8 md:py-16 md:px-12 flex flex-col items-center">
         <img
           src={Logo}
           alt="logo video talker"
-          className="max-h-36 mt-4 mb-8 "
+          className="max-h-28 md:max-h-36 mt-4 mb-8 "
         />
-        <h1 className="text-customWhite text-4xl font-bold mb-8">
+        <h1 className="text-customWhite text-2xl md:text-4xl font-bold mb-8">
           Get On Dashboard
         </h1>
         <div className="flex flex-col items-center w-full ">
           <input
             ref={inputRef}
             type="text"
-            className="bg-customBlue text-customWhite text-center h-12 w-5/6 rounded-full focus:outline-none font-bold text-xl placeholder-gray-300 mb-8"
+            className="bg-customBlue text-customWhite text-center h-12 w-5/6 rounded-full focus:outline-none font-bold text-lg md:text-xl placeholder-gray-300 mb-8"
             placeholder="Your Name..."
             value={name}
             onChange={(e) => {
@@ -52,7 +52,7 @@ const LoginPage = (props) => {
             }}
           />
           <button
-            className="bg-customBlue text-customWhite text-center w-3/6 py-1 px-5 rounded-full focus:outline-none font-bold hover:bg-opacity-80"
+            className="bg-customBlue text-customWhite text-center w-3/6 py-2 px-2 md:py-1 text-sm md:text-lg md:px-5 rounded-full focus:outline-none font-bold hover:bg-opacity-80"
             onClick={() => {
               handleClick();
             }}
