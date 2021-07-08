@@ -4,13 +4,13 @@ import userAvatar from "../../resources/userAvatar.png";
 import { callToOtherUser } from "../../utils/webRTC";
 import * as constants from "../../constants/index";
 
-const ActiveUsersList = ({ setShowDrawer = null }) => {
+const ActiveUsersList = ({ closeDrawer = null }) => {
   const { activeUsers, socketId } = useSelector((state) => state.dashboard);
   const { callState } = useSelector((state) => state.call);
 
   const handleUserListClick = (user) => {
     callToOtherUser(user);
-    setShowDrawer && setShowDrawer();
+    closeDrawer && closeDrawer();
   };
 
   return (

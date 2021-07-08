@@ -7,6 +7,8 @@ import {
   setCallRejected,
   setRemoteStream,
   setScreenSharingActive,
+  setLocalCameraEnable,
+  setLocalMicroPhoneEnable,
 } from "../../Dashboard/store/callSlice";
 import * as constants from "../../constants";
 import store from "../../store";
@@ -224,6 +226,9 @@ const resetCallDataAfterHangUp = () => {
   peerConnection.close();
   peerConnection = null;
   createPeerConnection();
+  setScreenSharingActive(false);
+  setLocalCameraEnable(true);
+  setLocalMicroPhoneEnable(true);
   resetCallData();
 
   if (store.getState().call.screenSharingActive) {

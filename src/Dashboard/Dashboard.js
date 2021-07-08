@@ -12,6 +12,7 @@ import * as constants from "../constants";
 import ActiveUsersList from "./ActiveUsersList";
 import ConversationButtons from "./CoversationButtons";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import notificationSound from "../resources/notification_sound.mp3";
 
 const Dashboard = (props) => {
   const {
@@ -22,8 +23,10 @@ const Dashboard = (props) => {
     callRejected,
     remoteStream,
   } = useSelector((state) => state.call);
-  const { username, activeUsers } = useSelector((state) => state.dashboard);
-
+  const { username, activeUsers, socketId } = useSelector(
+    (state) => state.dashboard
+  );
+  const [isOpend, setIsOpend] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [showRedDot, setShowRedDot] = useState(false);
   const [rooms, setRooms] = useState([]);
@@ -32,11 +35,25 @@ const Dashboard = (props) => {
     if (username) {
       getLocalStream();
     }
-  }, []);
+  }, [username]);
 
   useEffect(() => {
-    setShowRedDot(true);
+    if (activeUsers.length > 1) {
+      setShowRedDot(true);
+    }
   }, [activeUsers.length]);
+
+  const openDrawer = () => {
+    setIsOpend(true);
+    setShowDrawer(true);
+  };
+
+  const closeDrawer = () => {
+    setIsOpend(false);
+    setTimeout(() => {
+      setShowDrawer(false);
+    }, 150);
+  };
 
   return (
     <>
@@ -55,25 +72,29 @@ const Dashboard = (props) => {
         <div className="block md:hidden h-16 bg-customBlack flex justify-between items-center px-4">
           <img src={Logo} alt="logo video talker" className="h-10" />
 
-          <button className="relative" onClick={() => setShowDrawer(true)}>
+          <button className="relative" onClick={() => openDrawer(true)}>
             <AiOutlineMenu className="h-8 w-8 text-customWhite" />
             {showRedDot && (
-              <div className="absolute w-3 h-3 bg-red-500 rounded-full top-0 right-0"></div>
+              <div className="absolute w-3 h-3 bg-red-500 rounded-full top-0 right-0">
+                <audio autoPlay>
+                  <source src={notificationSound} type="audio/mpeg" />
+                </audio>
+              </div>
             )}
           </button>
         </div>
         {showDrawer ? (
           <div
-            className={`h-full w-3/6 absolute md:hidden right-0 ${
-              showDrawer ? "open" : "close"
+            className={`w-3/6 absolute md:hidden right-0 ${
+              isOpend ? "open" : "close"
             } bg-customBlack z-10 `}
           >
-            <div className="h-full">
+            <div className="h-screen">
               <div className="h-16 flex justify-start items-center">
                 <button
                   className="ml-4"
                   onClick={() => {
-                    setShowDrawer(false);
+                    closeDrawer();
                     setShowRedDot(false);
                   }}
                 >
@@ -81,7 +102,7 @@ const Dashboard = (props) => {
                 </button>
               </div>
               <div className="overflow-y-auto">
-                <ActiveUsersList setShowDrawer={setShowDrawer} />
+                <ActiveUsersList closeDrawer={closeDrawer} />
               </div>
             </div>
           </div>
@@ -141,8 +162,8 @@ const Dashboard = (props) => {
               );
             })}
           </div>
-          <div className="w-1/6 hidden md:block bg-customBlack hover:bg-customBlue cursor-pointer ">
-            <div className=" h-full flex justify-center items-center">
+          <div className="w-2/6 xl:w-1/6 hidden md:block bg-customBlack hover:bg-customBlue cursor-pointer ">
+            <div className="h-full flex justify-center items-center">
               <img src={Logo} alt="logo video talker" className="w-3/6 " />
             </div>
           </div>
