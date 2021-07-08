@@ -13,11 +13,7 @@ const RemoteVideoPreview = () => {
 
   return (
     <div className="h-full w-full">
-      <div className="border-2 border-red w-16 h-16 absolute bottom-0"></div>
-
-      <video ref={remoteVideoRef} autoPlay className="video">
-        <div></div>
-      </video>
+      <video ref={remoteVideoRef} autoPlay className="video"></video>
     </div>
   );
 };

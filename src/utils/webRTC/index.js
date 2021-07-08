@@ -226,9 +226,11 @@ const resetCallDataAfterHangUp = () => {
   peerConnection.close();
   peerConnection = null;
   createPeerConnection();
-  setScreenSharingActive(false);
-  setLocalCameraEnable(true);
-  setLocalMicroPhoneEnable(true);
+  store.dispatch(setScreenSharingActive(false));
+  store.dispatch(setLocalCameraEnable(true));
+  store.dispatch(setLocalMicroPhoneEnable(true));
+  store.getState().call.localStream.getAudioTracks()[0].enabled = true;
+  store.getState().call.localStream.getVideoTracks()[0].enabled = true;
   resetCallData();
 
   if (store.getState().call.screenSharingActive) {
