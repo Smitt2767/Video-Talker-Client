@@ -59,13 +59,15 @@ const ConversationButtons = () => {
               <MdVideocamOff className="h-8 w-8 text-customWhite" />
             )}
           </ConversationButton>
-          <ConversationButton handleOnClick={switchCameraAndScreenSharing}>
-            {!screenSharingActive ? (
-              <MdVideoLabel className="h-8 w-8 text-customWhite" />
-            ) : (
-              <MdCamera className="h-8 w-8 text-customWhite" />
-            )}
-          </ConversationButton>
+          {navigator.userAgent.toLowerCase().indexOf("android") === -1 && (
+            <ConversationButton handleOnClick={switchCameraAndScreenSharing}>
+              {!screenSharingActive ? (
+                <MdVideoLabel className="h-8 w-8 text-customWhite" />
+              ) : (
+                <MdCamera className="h-8 w-8 text-customWhite" />
+              )}
+            </ConversationButton>
+          )}
         </div>
       </div>
     </div>

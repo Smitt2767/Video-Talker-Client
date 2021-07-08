@@ -12,7 +12,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-screen w-full overflow-hidden">
       <Router>
         <Switch>
           <Route path="/" exact component={LoginPage} />

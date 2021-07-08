@@ -64,12 +64,12 @@ const Dashboard = (props) => {
         </div>
         {showDrawer ? (
           <div
-            className={`h-full w-2/6 absolute md:hidden right-0 ${
+            className={`h-full w-3/6 absolute md:hidden right-0 ${
               showDrawer ? "open" : "close"
             } bg-customBlack z-10 `}
           >
             <div className="h-full">
-              <div className="h-16  flex justify-start items-center">
+              <div className="h-16 flex justify-start items-center">
                 <button
                   className="ml-4"
                   onClick={() => {
@@ -80,7 +80,7 @@ const Dashboard = (props) => {
                   <AiOutlineClose className="h-8 w-8 text-customWhite" />
                 </button>
               </div>
-              <div className="overflow-y-auto h-full">
+              <div className="overflow-y-auto">
                 <ActiveUsersList setShowDrawer={setShowDrawer} />
               </div>
             </div>
