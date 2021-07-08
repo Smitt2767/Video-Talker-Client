@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import * as wssConnection from "./utils/wssConnection";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import "./index.css";
 
-function App() {
+import LoginPage from "./LoginPage/LoginPage";
+import Dashboard from "./Dashboard/Dashboard";
+
+const App = () => {
+  useEffect(() => {
+    wssConnection.connectWithWebSocket();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="h-screen w-full">
+      <Router>
+        <Switch>
+          <Route path="/" exact component={LoginPage} />
+          <Route path="/dashboard" exact component={Dashboard} />
+        </Switch>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
