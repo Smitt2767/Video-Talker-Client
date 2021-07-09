@@ -26,6 +26,7 @@ export const connectWithMyPeer = () => {
     console.log("successfully connected with peer server");
     myPeerId = id;
   });
+
   myPeer.on("call", (call) => {
     call.answer(store.getState().call.localStream);
     call.on("stream", (incomingStream) => {
@@ -52,6 +53,9 @@ export const clearGroupData = () => {
   store.dispatch(clearGroupCallData());
   myPeer.destroy();
   connectWithMyPeer();
+
+  store.getState().call.localStream.getVideoTracks()[0].enabled = true;
+  store.getState().call.localStream.getAudioTracks()[0].enabled = true;
 };
 export const leaveGroupCall = () => {
   if (groupCallHost) {
@@ -69,7 +73,6 @@ export const leaveGroupCall = () => {
 };
 
 export const removeInactiveStream = (data) => {
-  console.log(data);
   const groupCallStreams = store
     .getState()
     .call.groupCallStreams.filter((stream) => stream.id !== data.streamId);
