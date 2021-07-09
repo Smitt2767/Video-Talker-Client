@@ -16,7 +16,9 @@ let groupCallHost = false;
 export const connectWithMyPeer = () => {
   myPeer = new window.Peer(undefined, {
     path: "/peerjs",
-    host: "/",
+    host: "https://video--talker.herokuapp.com/",
+    // host: "/",
+    // port: "3001",
     port: "443",
   });
 
