@@ -15,6 +15,9 @@ const initialState = {
   localCameraEnable: true,
   localMicroPhoneEnable: true,
   screenSharingActive: false,
+  rooms: [],
+  groupCallActive: false,
+  groupCallStreams: [],
 };
 
 export const callSlice = createSlice({
@@ -52,6 +55,23 @@ export const callSlice = createSlice({
     setScreenSharingActive: (state, action) => {
       state.screenSharingActive = action.payload;
     },
+    setRooms: (state, action) => {
+      state.rooms = action.payload;
+    },
+    setGroupCallActive: (state, action) => {
+      state.groupCallActive = action.payload;
+    },
+    setGroupCallStreams: (state, action) => {
+      state.groupCallStreams = action.payload;
+    },
+    clearGroupCallData: (state, action) => {
+      state.groupCallActive = false;
+      state.callState = constants.callState.CALL_AVAILABLE;
+      state.groupCallStreams = [];
+      state.localCameraEnable = true;
+      state.localMicroPhoneEnable = true;
+      state.screenSharingActive = false;
+    },
   },
 });
 
@@ -66,6 +86,10 @@ export const {
   setLocalCameraEnable,
   setLocalMicroPhoneEnable,
   setScreenSharingActive,
+  setRooms,
+  setGroupCallActive,
+  setGroupCallStreams,
+  clearGroupCallData,
 } = callSlice.actions;
 
 export default callSlice.reducer;

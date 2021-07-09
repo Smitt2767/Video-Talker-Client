@@ -6,8 +6,10 @@ import {
 } from "../../Dashboard/store/dashboardSlice";
 import * as constants from "../../constants";
 import * as webRTCHandler from "../webRTC";
-// const SERVER_URL = "http://192.168.0.101:3001/";
-const SERVER_URL = "https://video--talker.herokuapp.com/";
+import { setRooms } from "../../Dashboard/store/callSlice";
+import * as webRTCGroupCallHandler from "../webRTC/webRTCGroupCallHandler";
+const SERVER_URL = "http://192.168.0.101:3001/";
+// const SERVER_URL = "https://video--talker.herokuapp.com/";
 
 let socket;
 
@@ -37,6 +39,12 @@ export const connectWithWebSocket = () => {
   socket.on("user-hangedup", () => {
     webRTCHandler.handleUserHangedUp();
   });
+  socket.on("group-call-join-request", (data) => {
+    webRTCGroupCallHandler.connectToNewUser(data);
+  });
+  socket.on("group-call-user-left", (data) => {
+    webRTCGroupCallHandler.removeInactiveStream(data);
+  });
 };
 
 export const registerNewUser = (data) => {
@@ -49,6 +57,20 @@ const handleBoradcastEvents = (data) => {
       store.dispatch(setActiveUsers(data));
       break;
     case constants.broadcastingEvents.GROUP_CALL_ROOMS:
+      const rooms = data.rooms.filter((room) => room.socketId !== socket.id);
+      const activeGroupCallRoomId =
+        webRTCGroupCallHandler.checkActiveGroupCall();
+
+      if (activeGroupCallRoomId) {
+        const room = rooms.find(
+          (room) => room.roomid === activeGroupCallRoomId
+        );
+        if (!room) {
+          webRTCGroupCallHandler.clearGroupData();
+        }
+      }
+      store.dispatch(setRooms(rooms));
+
       break;
     default:
       break;
@@ -78,4 +100,21 @@ export const sendWebRTCCandidate = (data) => {
 
 export const setUserHangup = (data) => {
   socket.emit("user-hangedup", data);
+};
+
+// Group calls
+export const registerGroupCall = (data) => {
+  socket.emit("group-call-register", data);
+};
+
+export const userWantsToJoinGroupCall = (data) => {
+  socket.emit("group-call-join-request", data);
+};
+
+export const userLeftGroupCall = (data) => {
+  socket.emit("group-call-user-left", data);
+};
+
+export const groupCallCloseByHost = (data) => {
+  socket.emit("group-call-close-by-host", data);
 };

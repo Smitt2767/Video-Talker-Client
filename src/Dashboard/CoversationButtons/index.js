@@ -16,6 +16,7 @@ import {
   setLocalMicroPhoneEnable,
 } from "../store/callSlice";
 import { hangUp, switchCameraAndScreenSharing } from "../../utils/webRTC";
+import { leaveGroupCall } from "../../utils/webRTC/webRTCGroupCallHandler";
 
 const ConversationButtons = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,12 @@ const ConversationButtons = () => {
     localCameraEnable,
     localMicroPhoneEnable,
     screenSharingActive,
+    groupCallActive,
   } = useSelector((state) => state.call);
+
+  const leaveRoom = () => {
+    leaveGroupCall();
+  };
 
   const handleMicButtonPressed = () => {
     const micEnabled = localMicroPhoneEnable;
@@ -49,9 +55,14 @@ const ConversationButtons = () => {
               <MdMicOff className="h-8 w-8 text-customWhite" />
             )}
           </ConversationButton>
-          <ConversationButton bgRed={true} handleOnClick={hangUp}>
+
+          <ConversationButton
+            bgRed={true}
+            handleOnClick={!groupCallActive ? hangUp : leaveRoom}
+          >
             <MdCallEnd className="h-8 w-8 text-customWhite" />
           </ConversationButton>
+
           <ConversationButton handleOnClick={handleCameraButtonPressed}>
             {localCameraEnable ? (
               <MdVideocam className="h-8 w-8 text-customWhite" />
@@ -59,15 +70,16 @@ const ConversationButtons = () => {
               <MdVideocamOff className="h-8 w-8 text-customWhite" />
             )}
           </ConversationButton>
-          {navigator.userAgent.toLowerCase().indexOf("android") === -1 && (
-            <ConversationButton handleOnClick={switchCameraAndScreenSharing}>
-              {!screenSharingActive ? (
-                <MdVideoLabel className="h-8 w-8 text-customWhite" />
-              ) : (
-                <MdCamera className="h-8 w-8 text-customWhite" />
-              )}
-            </ConversationButton>
-          )}
+          {navigator.userAgent.toLowerCase().indexOf("android") === -1 &&
+            !groupCallActive && (
+              <ConversationButton handleOnClick={switchCameraAndScreenSharing}>
+                {!screenSharingActive ? (
+                  <MdVideoLabel className="h-8 w-8 text-customWhite" />
+                ) : (
+                  <MdCamera className="h-8 w-8 text-customWhite" />
+                )}
+              </ConversationButton>
+            )}
         </div>
       </div>
     </div>

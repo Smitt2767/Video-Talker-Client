@@ -13,7 +13,9 @@ import ActiveUsersList from "./ActiveUsersList";
 import ConversationButtons from "./CoversationButtons";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import notificationSound from "../resources/notification_sound.mp3";
-
+import GroupCallRoomList from "./GroupCallRoomList";
+import GroupCall from "./GroupCall";
+import { connectWithMyPeer } from "../utils/webRTC/webRTCGroupCallHandler";
 const Dashboard = (props) => {
   const {
     callerUsername,
@@ -22,6 +24,7 @@ const Dashboard = (props) => {
     callState,
     callRejected,
     remoteStream,
+    groupCallActive,
   } = useSelector((state) => state.call);
   const { username, activeUsers, socketId } = useSelector(
     (state) => state.dashboard
@@ -34,6 +37,7 @@ const Dashboard = (props) => {
   useEffect(() => {
     if (username) {
       getLocalStream();
+      connectWithMyPeer();
     }
   }, [username]);
 
@@ -69,7 +73,7 @@ const Dashboard = (props) => {
       )}
 
       <div className="h-full flex flex-col">
-        <div className="block md:hidden h-16 bg-customBlack flex justify-between items-center px-4">
+        <div className="block md:hidden h-24 bg-customBlack flex justify-between items-center px-4">
           <img src={Logo} alt="logo video talker" className="h-10" />
 
           <button className="relative" onClick={() => openDrawer(true)}>
@@ -111,31 +115,30 @@ const Dashboard = (props) => {
         <div className="h-5/6 w-full flex">
           <div className="w-full bg-customBlue flex">
             <div className="w-full relative">
-              {remoteStream &&
-              callState === constants.callState.CALL_IN_PROGRESS ? (
-                <RemoteVideoPreview />
-              ) : (
-                <div className=" h-full flex flex-col justify-center px-4 md:px-8">
-                  <h1 className="text-customWhite text-4xl md:text-6xl">
-                    Hello {username},Welcome To Video Talker
-                  </h1>
-                  <p className="text-gray-300 mt-3 text-sm md:text-xl">
-                    You can start a call calling directly to a user from a list
-                    or you can create or join group call...
-                  </p>
-                </div>
-              )}
-              <div className="absolute top-5 left-5">
-                <button className="bg-customBlack text-customWhite px-4 md:px-8 py-2 font-bold rounded-full hover:bg-opacity-80">
-                  Create Room
-                </button>
-              </div>
+              {<GroupCall />}
+
+              {!groupCallActive ? (
+                remoteStream &&
+                callState === constants.callState.CALL_IN_PROGRESS ? (
+                  <RemoteVideoPreview />
+                ) : (
+                  <div className=" h-full flex flex-col justify-center px-4 md:px-8">
+                    <h1 className="text-customWhite text-4xl md:text-6xl">
+                      Hello {username},Welcome To Video Talker
+                    </h1>
+                    <p className="text-gray-300 mt-3 text-sm md:text-xl">
+                      You can start a call calling directly to a user from a
+                      list or you can create or join group call...
+                    </p>
+                  </div>
+                )
+              ) : null}
+
               <div className="absolute top-5 right-5 block lg:hidden h-40 w-40">
                 <LocalVideoPreview />
               </div>
-              {callState === constants.callState.CALL_IN_PROGRESS ? (
-                <ConversationButtons />
-              ) : null}
+              {callState === constants.callState.CALL_IN_PROGRESS &&
+                !callingDialogVisible && <ConversationButtons />}
             </div>
             <div className="w-1/6 p-2 hidden lg:block">
               <div>
@@ -148,20 +151,7 @@ const Dashboard = (props) => {
           </div>
         </div>
         <div className="h-1/6 w-full flex">
-          <div className="w-full bg-customBlack flex overflow-y-auto">
-            {rooms.map((room) => {
-              return (
-                <div
-                  className="w-40 px-4 border-t-2 border-r-2 border-customBlack flex justify-center items-center bg-customBlue cursor-pointer hover:bg-opacity-40"
-                  key={room.id}
-                >
-                  <h3 className="text-xl text-customWhite font-bold">
-                    {room.roomname}
-                  </h3>
-                </div>
-              );
-            })}
-          </div>
+          <GroupCallRoomList />
           <div className="w-2/6 xl:w-1/6 hidden md:block bg-customBlack hover:bg-customBlue cursor-pointer ">
             <div className="h-full flex justify-center items-center">
               <img src={Logo} alt="logo video talker" className="w-3/6 " />

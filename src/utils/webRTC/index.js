@@ -15,7 +15,10 @@ import store from "../../store";
 import * as wss from "../wssConnection";
 
 const defaultConstraints = {
-  video: true,
+  video: {
+    width: 480,
+    height: 360,
+  },
   audio: true,
 };
 const config = {
@@ -188,6 +191,7 @@ export const switchCameraAndScreenSharing = async () => {
         video: true,
       });
       store.dispatch(setScreenSharingActive(true));
+
       const senders = peerConnection.getSenders();
       const sender = senders.find(
         (sender) =>
