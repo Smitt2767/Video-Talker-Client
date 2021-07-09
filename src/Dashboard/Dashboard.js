@@ -16,6 +16,7 @@ import notificationSound from "../resources/notification_sound.mp3";
 import GroupCallRoomList from "./GroupCallRoomList";
 import GroupCall from "./GroupCall";
 import { connectWithMyPeer } from "../utils/webRTC/webRTCGroupCallHandler";
+import { disconnectUser } from "../utils/wssConnection";
 const Dashboard = (props) => {
   const {
     callerUsername,
@@ -26,13 +27,10 @@ const Dashboard = (props) => {
     remoteStream,
     groupCallActive,
   } = useSelector((state) => state.call);
-  const { username, activeUsers, socketId } = useSelector(
-    (state) => state.dashboard
-  );
+  const { username, activeUsers } = useSelector((state) => state.dashboard);
   const [isOpend, setIsOpend] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [showRedDot, setShowRedDot] = useState(false);
-  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
     if (username) {

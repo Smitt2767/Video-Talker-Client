@@ -8,8 +8,8 @@ import * as constants from "../../constants";
 import * as webRTCHandler from "../webRTC";
 import { setRooms } from "../../Dashboard/store/callSlice";
 import * as webRTCGroupCallHandler from "../webRTC/webRTCGroupCallHandler";
-// const SERVER_URL = "http://192.168.0.101:3001/";
-const SERVER_URL = "https://video--talker.herokuapp.com/";
+const SERVER_URL = "http://192.168.0.101:3001/";
+// const SERVER_URL = "https://video--talker.herokuapp.com/";
 
 let socket;
 
